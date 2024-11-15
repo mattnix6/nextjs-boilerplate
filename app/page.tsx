@@ -17,6 +17,7 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [isGameActive, setIsGameActive] = useState(false);
+  const [isSpaceDown, setIsSpaceDown] = useState(false);
   const [clickData, setClickData] = useState<number[]>([]);
 
   const startGame = () => {
@@ -34,7 +35,36 @@ export default function Home() {
     if (timeLeft === 0) {
       setIsGameActive(false);
     }
-  }, [isGameActive, timeLeft]);
+    
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space" && isGameActive && !isSpaceDown) {
+        event.preventDefault();
+        setIsSpaceDown(true);
+      }
+    };
+    
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.code === "Space" && isGameActive && isSpaceDown) {
+        event.preventDefault();
+        setIsSpaceDown(false);
+        handleScore();
+      }
+    };
+
+    if (isGameActive) {
+      window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("keyup", handleKeyUp);
+    } else {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+    
+  }, [isGameActive, timeLeft, isSpaceDown]);
 
   const handleScore = () => {
     if (isGameActive) {
