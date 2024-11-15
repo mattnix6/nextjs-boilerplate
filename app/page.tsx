@@ -6,6 +6,7 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [isGameActive, setIsGameActive] = useState(false);
+  const [isSpaceDown, setIsSpaceDown] = useState(false); // État de la touche "Espace"
 
   // Gestion du timer
   useEffect(() => {
@@ -23,30 +24,41 @@ export default function Home() {
     setIsGameActive(true);
   };
 
-  // Fonction pour incrémenter le score
-  const handleClick = () => {
+  // Fonction pour incrémenter le score (appelée lors de `keyup`)
+  const handleScore = () => {
     if (isGameActive) setScore((prev) => prev + 1);
   };
 
-  // Écoute des événements de la touche "Espace"
+  // Gestion des événements clavier
   useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.code === "Space" && isGameActive) {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space" && isGameActive && !isSpaceDown) {
         event.preventDefault(); // Empêche le défilement de la page
-        handleClick();
+        setIsSpaceDown(true);
+      }
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.code === "Space" && isGameActive && isSpaceDown) {
+        event.preventDefault();
+        setIsSpaceDown(false);
+        handleScore(); // Incrémente le score
       }
     };
 
     if (isGameActive) {
-      window.addEventListener("keydown", handleKeyPress);
+      window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("keyup", handleKeyUp);
     } else {
-      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
     }
 
     return () => {
-      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [isGameActive]);
+  }, [isGameActive, isSpaceDown]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800 p-8">
@@ -61,7 +73,7 @@ export default function Home() {
             Score: <span className="font-bold">{score}</span>
           </p>
           <button
-            onClick={handleClick}
+            onClick={handleScore}
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           >
             Click Me! (or Press Space)
