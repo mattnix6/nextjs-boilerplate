@@ -17,13 +17,13 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [isGameActive, setIsGameActive] = useState(false);
-  const [clickData, setClickData] = useState<number[]>([]); // Correctly typed as an array of numbers
+  const [clickData, setClickData] = useState<number[]>([]);
 
   const startGame = () => {
     setScore(0);
     setTimeLeft(10);
     setIsGameActive(true);
-    setClickData(Array(10).fill(0)); // This will now work
+    setClickData(Array(10).fill(0));
   };
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function Home() {
       setScore((prev) => prev + 1);
       setClickData((prev) => {
         const updated = [...prev];
-        updated[10 - timeLeft] += 1; // Increment click count for the current second
+        updated[10 - timeLeft] += 1;
         return updated;
       });
     }
@@ -73,7 +73,7 @@ export default function Home() {
       annotation: {
         annotations: {
           low: {
-            type: "line",
+            type: "line" as const, // Explicitly set type as "line"
             yMin: 3,
             yMax: 3,
             borderColor: "green",
@@ -87,7 +87,7 @@ export default function Home() {
             },
           },
           medium: {
-            type: "line",
+            type: "line" as const, // Explicitly set type as "line"
             yMin: 6,
             yMax: 6,
             borderColor: "orange",
@@ -101,7 +101,7 @@ export default function Home() {
             },
           },
           high: {
-            type: "line",
+            type: "line" as const, // Explicitly set type as "line"
             yMin: 9,
             yMax: 9,
             borderColor: "red",
@@ -119,26 +119,6 @@ export default function Home() {
     },
   };
 
-  // Event listener for space key press to count clicks
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space" && isGameActive) {
-        event.preventDefault(); // Prevent default spacebar behavior (scrolling)
-        handleScore();
-      }
-    };
-
-    if (isGameActive) {
-      window.addEventListener("keydown", handleKeyDown);
-    } else {
-      window.removeEventListener("keydown", handleKeyDown);
-    }
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isGameActive, timeLeft]);
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800 p-8">
       <h1 className="text-3xl font-bold mb-4">Kekety Challenge</h1>
@@ -155,7 +135,7 @@ export default function Home() {
             onClick={handleScore}
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           >
-            Click Me! (or Press Space)
+            Click Me!
           </button>
           <div className="w-full mt-8">
             <Line data={chartData} options={chartOptions} />
