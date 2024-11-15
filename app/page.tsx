@@ -35,19 +35,32 @@ export default function Home() {
     if (timeLeft === 0) {
       setIsGameActive(false);
     }
-    
+  }, [isGameActive, timeLeft]);
+
+  const handleScore = () => {
+    if (isGameActive) {
+      setScore((prev) => prev + 1);
+      setClickData((prev) => {
+        const updated = [...prev];
+        updated[10 - timeLeft] += 1;
+        return updated;
+      });
+    }
+  };
+
+  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space" && isGameActive && !isSpaceDown) {
-        event.preventDefault();
+        event.preventDefault(); // Empêche le défilement de la page
         setIsSpaceDown(true);
       }
     };
-    
+
     const handleKeyUp = (event: KeyboardEvent) => {
       if (event.code === "Space" && isGameActive && isSpaceDown) {
         event.preventDefault();
         setIsSpaceDown(false);
-        handleScore();
+        handleScore(); // Incrémente le score
       }
     };
 
@@ -63,19 +76,7 @@ export default function Home() {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-    
-  }, [isGameActive, timeLeft, isSpaceDown]);
-
-  const handleScore = () => {
-    if (isGameActive) {
-      setScore((prev) => prev + 1);
-      setClickData((prev) => {
-        const updated = [...prev];
-        updated[10 - timeLeft] += 1;
-        return updated;
-      });
-    }
-  };
+  }, [isGameActive, isSpaceDown]);
 
   const chartData = {
     labels: [...Array(10).keys()].map((i) => `${i + 1}s`),
