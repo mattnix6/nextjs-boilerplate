@@ -50,7 +50,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800 p-8">
-      <h1 className="text-3xl font-bold mb-4">Clickety Split: The Button Bash Challenge</h1>
+      <h1 className="text-3xl font-bold mb-4">Kekety Challenge</h1>
 
       {isGameActive ? (
         <>
