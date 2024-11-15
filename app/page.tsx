@@ -1,3 +1,5 @@
+"use client"; // Ajouté pour indiquer que c'est un Client Component
+
 import { useState, useEffect } from "react";
 
 export default function Home() {
