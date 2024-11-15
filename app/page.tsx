@@ -1,64 +1,123 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
+import annotationPlugin from "chartjs-plugin-annotation";
+
+ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, annotationPlugin);
 
 export default function Home() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [isGameActive, setIsGameActive] = useState(false);
-  const [isSpaceDown, setIsSpaceDown] = useState(false); // État de la touche "Espace"
+  const [clickData, setClickData] = useState([]);
 
-  // Gestion du timer
+  const startGame = () => {
+    setScore(0);
+    setTimeLeft(10);
+    setIsGameActive(true);
+    setClickData(Array(10).fill(0));
+  };
+
   useEffect(() => {
     if (isGameActive && timeLeft > 0) {
       const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
       return () => clearInterval(timer);
     }
-    if (timeLeft === 0) setIsGameActive(false);
+    if (timeLeft === 0) {
+      setIsGameActive(false);
+    }
   }, [isGameActive, timeLeft]);
 
-  // Fonction pour démarrer le jeu
-  const startGame = () => {
-    setScore(0);
-    setTimeLeft(10);
-    setIsGameActive(true);
-  };
-
-  // Fonction pour incrémenter le score (appelée lors de `keyup`)
   const handleScore = () => {
-    if (isGameActive) setScore((prev) => prev + 1);
+    if (isGameActive) {
+      setScore((prev) => prev + 1);
+      setClickData((prev) => {
+        const updated = [...prev];
+        updated[10 - timeLeft] += 1;
+        return updated;
+      });
+    }
   };
 
-  // Gestion des événements clavier
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space" && isGameActive && !isSpaceDown) {
-        event.preventDefault(); // Empêche le défilement de la page
-        setIsSpaceDown(true);
-      }
-    };
+  const chartData = {
+    labels: [...Array(10).keys()].map((i) => `${i + 1}s`),
+    datasets: [
+      {
+        label: "Clicks per second",
+        data: clickData,
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderWidth: 2,
+        tension: 0.3,
+      },
+    ],
+  };
 
-    const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.code === "Space" && isGameActive && isSpaceDown) {
-        event.preventDefault();
-        setIsSpaceDown(false);
-        handleScore(); // Incrémente le score
-      }
-    };
-
-    if (isGameActive) {
-      window.addEventListener("keydown", handleKeyDown);
-      window.addEventListener("keyup", handleKeyUp);
-    } else {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    }
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, [isGameActive, isSpaceDown]);
+  const chartOptions = {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 10,
+      },
+    },
+    plugins: {
+      annotation: {
+        annotations: {
+          low: {
+            type: "line",
+            yMin: 3,
+            yMax: 3,
+            borderColor: "green",
+            borderWidth: 2,
+            label: {
+              content: "Low",
+              enabled: true,
+              position: "start",
+              backgroundColor: "rgba(0, 128, 0, 0.8)",
+              color: "white",
+            },
+          },
+          medium: {
+            type: "line",
+            yMin: 6,
+            yMax: 6,
+            borderColor: "orange",
+            borderWidth: 2,
+            label: {
+              content: "Medium",
+              enabled: true,
+              position: "start",
+              backgroundColor: "rgba(255, 165, 0, 0.8)",
+              color: "white",
+            },
+          },
+          high: {
+            type: "line",
+            yMin: 9,
+            yMax: 9,
+            borderColor: "red",
+            borderWidth: 2,
+            label: {
+              content: "High",
+              enabled: true,
+              position: "start",
+              backgroundColor: "rgba(255, 0, 0, 0.8)",
+              color: "white",
+            },
+          },
+        },
+      },
+    },
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800 p-8">
@@ -78,6 +137,9 @@ export default function Home() {
           >
             Click Me! (or Press Space)
           </button>
+          <div className="w-full mt-8">
+            <Line data={chartData} options={chartOptions} />
+          </div>
         </>
       ) : (
         <>
