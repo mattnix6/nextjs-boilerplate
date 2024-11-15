@@ -17,13 +17,13 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [isGameActive, setIsGameActive] = useState(false);
-  const [clickData, setClickData] = useState([]);
+  const [clickData, setClickData] = useState<number[]>([]); // Correctly typed as an array of numbers
 
   const startGame = () => {
     setScore(0);
     setTimeLeft(10);
     setIsGameActive(true);
-    setClickData(Array(10).fill(0));
+    setClickData(Array(10).fill(0)); // This will now work
   };
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function Home() {
       setScore((prev) => prev + 1);
       setClickData((prev) => {
         const updated = [...prev];
-        updated[10 - timeLeft] += 1;
+        updated[10 - timeLeft] += 1; // Increment click count for the current second
         return updated;
       });
     }
@@ -118,6 +118,26 @@ export default function Home() {
       },
     },
   };
+
+  // Event listener for space key press to count clicks
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space" && isGameActive) {
+        event.preventDefault(); // Prevent default spacebar behavior (scrolling)
+        handleScore();
+      }
+    };
+
+    if (isGameActive) {
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isGameActive, timeLeft]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800 p-8">
