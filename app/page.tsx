@@ -135,9 +135,9 @@ export default function Home() {
             onClick={handleScore}
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           >
-            Click Me!
+            Click Me! (or Press Space)
           </button>
-          <div className="w-full mt-8">
+          <div className="w-full mt-8 max-w-[500px]">
             <Line data={chartData} options={chartOptions} />
           </div>
         </>
