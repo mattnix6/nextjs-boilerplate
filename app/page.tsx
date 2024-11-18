@@ -160,7 +160,7 @@ export default function Home() {
 
     const shareText = `🎮 I scored ${score} points in the Kekety Challenge! Can you beat my score? #KeketyChallenge`;
 
-    if (navigator.share) {
+    if (navigator.canShare()) {
       navigator
         .share({
           title: "Kekety Challenge Score",
