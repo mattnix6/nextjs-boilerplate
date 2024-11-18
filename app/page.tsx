@@ -18,7 +18,7 @@ ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, annotati
 export default function Home() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
-  const [initialCountdown, setInitialCountdown] = useState(-1);
+  const [initialCountdown, setInitialCountdown] = useState(3);
   const [isGameActive, setIsGameActive] = useState(false);
   const [isSpaceDown, setIsSpaceDown] = useState(false);
   const [clickData, setClickData] = useState<number[]>([]);
@@ -27,7 +27,7 @@ export default function Home() {
     setScore(0);
     setTimeLeft(10);
     setInitialCountdown(3);
-    setIsGameActive(true);
+    setIsGameActive(false);
     setClickData(Array(10).fill(0));
   };
 
@@ -43,7 +43,6 @@ export default function Home() {
     if (initialCountdown === 0) {
       setIsGameActive(true);
     }
-    setInitialCountdown(0);
   }, [initialCountdown]);
 
   useEffect(() => {
@@ -52,7 +51,7 @@ export default function Home() {
       return () => clearInterval(timer);
     }
     if (timeLeft === 0) {
-      setIsGameActive(false);
+      setIsGameActive(false);  // End game when time is up
     }
   }, [isGameActive, timeLeft]);
 
