@@ -198,26 +198,16 @@ export default function Home() {
         </>
       ) : (
         <>
-          <p className="text-lg mb-8">
-            {timeLeft === 0 ? `Time's up! Your score: ${score}` : "Ready to play?"}
-          </p>
-          <button
-            onClick={startGame}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-          >
-            Start Game
-          </button>
-
-          <div id="game-summary" className="text-center mb-8">
-            <p className="text-lg">
-              {timeLeft === 0 ? `Time's up! Your score: ${score}` : "Ready to play?"}
-            </p>
-            <div className="w-full mt-4 max-w-[500px]">
-              <Line data={chartData} options={chartOptions} />
-            </div>
-          </div>
-
           {timeLeft === 0 && score !== 0 && (
+            <div id="game-summary" className="text-center mb-8">
+              <p className="text-lg">
+                {timeLeft === 0 ? `Time's up! Your score: ${score}` : "Ready to play?"}
+              </p>
+              <div className="w-full mt-8 max-w-[500px]">
+                <Line data={chartData} options={chartOptions} />
+              </div>
+            </div>
+
             <button
               onClick={shareScore}
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4"
@@ -225,6 +215,17 @@ export default function Home() {
               Share Your Score
             </button>
           )}
+      
+          <p className="text-lg mb-8">
+            {timeLeft === 0 ? `Time's up! Your score: ${score}` : "Ready to play?"}
+          </p>
+      
+          <button
+            onClick={startGame}
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Start Game
+          </button>
           
         </>
       )}
