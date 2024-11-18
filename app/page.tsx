@@ -199,7 +199,7 @@ export default function Home() {
       ) : (
         <>
           <p className="text-lg mb-8">
-            {timeLeft === 0 ? `Time's up! Your score: ${score}` : "Ready to play?"}
+            {timeLeft === 0 ? `Time's up!` : "Ready to play?"}
           </p>
           <button
             onClick={startGame}
