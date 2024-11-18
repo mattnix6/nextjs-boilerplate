@@ -212,7 +212,7 @@ export default function Home() {
         <>
           <div id="game-summary" className="text-center mb-8">
             <p className="text-lg">
-              `Score: ${score}`
+              Score: {score}
             </p>
             <div className="w-full mt-8 max-w-[500px]">
               <Line data={chartData} options={chartOptions} />
