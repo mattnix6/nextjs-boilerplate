@@ -1,3 +1,20 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
+import annotationPlugin from "chartjs-plugin-annotation";
+import html2canvas from "html2canvas";
+import CustomLineChart from './components/CustomLineChart';
+
+ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, annotationPlugin);
+
 export default function Home() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
