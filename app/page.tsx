@@ -51,7 +51,7 @@ export default function Home() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space" && isGameActive && !isSpaceDown) {
-        event.preventDefault(); // Empêche le défilement de la page
+        event.preventDefault();
         setIsSpaceDown(true);
       }
     };
