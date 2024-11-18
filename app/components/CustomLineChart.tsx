@@ -1,10 +1,10 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
-import { ChartOptions } from 'chart.js';
+import { ChartOptions, ChartData } from 'chart.js';
 
 interface CustomLineChartProps {
-    data: any; 
-    options: ChartOptions;
+    data: ChartData<'line'>;
+    options: ChartOptions<'line'>;
     disableAnnotations?: boolean;
 }
 
