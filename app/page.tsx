@@ -10,6 +10,7 @@ import {
   LinearScale,
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
+import html2canvas from "html2canvas";
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, annotationPlugin);
 
