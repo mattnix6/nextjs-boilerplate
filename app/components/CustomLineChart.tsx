@@ -13,13 +13,16 @@ const CustomLineChart: React.FC<CustomLineChartProps> = ({
     options,
     disableAnnotations = false,
 }) =>  {
-    const chartOptions = {
+    const chartOptions: ChartOptions<'line'> = {
         ...options,
         plugins: {
-            ...options?.plugins,
-            annotation: disableAnnotations ? false : options?.plugins?.annotation,
+            ...options.plugins,
         },
     };
+    
+    if (disableAnnotations && chartOptions.plugins?.annotation) {
+        delete chartOptions.plugins.annotation;
+    }
 
     return <Line data={data} options={chartOptions} />;
 };
