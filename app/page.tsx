@@ -203,18 +203,18 @@ export default function Home() {
           </p>
           <button
             onClick={startGame}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-8"
           >
             {timeLeft === 0 ? `Restart Game` : "Start Game"}
           </button>
           
           {timeLeft === 0 && score !== 0 && (
         <>
-          <div id="game-summary" className="text-center mb-8">
+          <div id="game-summary" className="text-center">
             <p className="text-lg">
               Your score: {score}
             </p>
-            <div className="w-full mt-8 max-w-[500px]">
+            <div className="w-full max-w-[500px]">
               <Line data={chartData} options={chartOptions} />
             </div>
           </div>
