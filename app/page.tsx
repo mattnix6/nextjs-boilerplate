@@ -60,7 +60,7 @@ export default function Home() {
       if (event.code === "Space" && isGameActive && isSpaceDown) {
         event.preventDefault();
         setIsSpaceDown(false);
-        handleScore(); // Incrémente le score
+        handleScore();
       }
     };
 
