@@ -150,6 +150,29 @@ export default function Home() {
     },
   };
 
+    const shareScore = async () => {
+    const gameElement = document.getElementById("game-summary");
+    if (!gameElement) return;
+
+    const canvas = await html2canvas(gameElement);
+    const imageData = canvas.toDataURL("image/png");
+
+    const shareText = `🎮 I scored ${score} points in the Kekety Challenge! Can you beat my score? #KeketyChallenge`;
+
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "Kekety Challenge Score",
+          text: shareText,
+          url: imageData, 
+        })
+        .catch((err) => console.error("Share failed:", err));
+    } else {
+      navigator.clipboard.writeText(shareText);
+      alert("Score partagé avec succès ! Texte copié dans le presse-papiers.");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800 p-8">
       <h1 className="text-3xl font-bold mb-4">Kekety Challenge</h1>
@@ -183,6 +206,25 @@ export default function Home() {
           >
             Start Game
           </button>
+
+          <div id="game-summary" className="text-center mb-8">
+            <p className="text-lg">
+              {timeLeft === 0 ? `Time's up! Your score: ${score}` : "Ready to play?"}
+            </p>
+            <div className="w-full mt-4 max-w-[500px]">
+              <Line data={chartData} options={chartOptions} />
+            </div>
+          </div>
+
+          {timeLeft === 0 && score !== 0 && (
+            <button
+              onClick={shareScore}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4"
+            >
+              Share Your Score
+            </button>
+          )}
+          
         </>
       )}
     </div>
