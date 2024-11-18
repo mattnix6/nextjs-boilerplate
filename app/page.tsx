@@ -224,7 +224,7 @@ export default function Home() {
           )}
           <button
             onClick={startGame}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-8"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-8 mt-4"
           >
             {timeLeft === 0 ? `Restart Game` : "Start Game"}
           </button>
