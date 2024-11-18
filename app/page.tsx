@@ -209,7 +209,7 @@ export default function Home() {
           </button>
           
           {timeLeft === 0 && score !== 0 && (
-
+        <>
           <div id="game-summary" className="text-center mb-8">
             <p className="text-lg">
               `Score: ${score}`
@@ -225,6 +225,7 @@ export default function Home() {
             >
               Share Your Score
             </button>
+        </>
           )}
           
         </>
