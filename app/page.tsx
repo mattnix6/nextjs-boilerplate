@@ -18,7 +18,7 @@ ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, annotati
 export default function Home() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
-  const [initialCountdown, setInitialCountdown] = useState(0);
+  const [initialCountdown, setInitialCountdown] = useState(-1);
   const [isGameActive, setIsGameActive] = useState(false);
   const [isSpaceDown, setIsSpaceDown] = useState(false);
   const [clickData, setClickData] = useState<number[]>([]);
@@ -43,6 +43,7 @@ export default function Home() {
     if (initialCountdown === 0) {
       setIsGameActive(true);
     }
+    setInitialCountdown(0);
   }, [initialCountdown]);
 
   useEffect(() => {
