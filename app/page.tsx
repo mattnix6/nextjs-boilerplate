@@ -171,7 +171,7 @@ export default function Home() {
         .catch((err) => console.error("Share failed:", err));
     } else {
       navigator.clipboard.writeText(shareText);
-      alert("Score partagé avec succès ! Texte copié dans le presse-papiers.");
+      alert("Score shared successfully! Text copied to clipboard.");
     }
   };
 
