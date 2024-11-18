@@ -104,7 +104,7 @@ export default function Home() {
       annotation: {
         annotations: {
           low: {
-            type: "line" as const, // Explicitly set type as "line"
+            type: "line" as const,
             yMin: 3,
             yMax: 3,
             borderColor: "green",
@@ -118,7 +118,7 @@ export default function Home() {
             },
           },
           medium: {
-            type: "line" as const, // Explicitly set type as "line"
+            type: "line" as const,
             yMin: 6,
             yMax: 6,
             borderColor: "orange",
@@ -132,7 +132,7 @@ export default function Home() {
             },
           },
           high: {
-            type: "line" as const, // Explicitly set type as "line"
+            type: "line" as const,
             yMin: 9,
             yMax: 9,
             borderColor: "red",
