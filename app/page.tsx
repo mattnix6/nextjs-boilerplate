@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import html2canvas from "html2canvas";
+import CustomLineChart from './components/CustomLineChart';
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, annotationPlugin);
 
@@ -215,7 +216,7 @@ export default function Home() {
               Your score: {score}
             </p>
             <div className="w-full max-w-[500px]">
-              <Line data={chartData} options={chartOptions} />
+              <CustomLineChart data={chartData} options={chartOptions} disableAnnotations={true} />
             </div>
           </div>
           
