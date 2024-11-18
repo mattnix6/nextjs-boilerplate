@@ -27,7 +27,7 @@ export default function Home() {
     setScore(0);
     setTimeLeft(10);
     setInitialCountdown(3);
-    setIsGameActive(false);
+    setIsGameActive(true);
     setClickData(Array(10).fill(0));
   };
 
