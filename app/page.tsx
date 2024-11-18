@@ -11,37 +11,37 @@ import {
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import html2canvas from "html2canvas";
-import CustomLineChart from './components/CustomLineChart';
+import CustomLineChart from "./components/CustomLineChart";
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, annotationPlugin);
 
 export default function Home() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
+  const [initialCountdown, setInitialCountdown] = useState(3);
   const [isGameActive, setIsGameActive] = useState(false);
   const [isSpaceDown, setIsSpaceDown] = useState(false);
   const [clickData, setClickData] = useState<number[]>([]);
-  const [initialCountdown, setInitialCountdown] = useState<number | null>(3); // Décompte avant démarrage
 
   const startGame = () => {
     setScore(0);
     setTimeLeft(10);
+    setInitialCountdown(3);
+    setIsGameActive(false);
     setClickData(Array(10).fill(0));
-    setInitialCountdown(3); // Lancer le décompte initial
   };
 
   useEffect(() => {
-    if (initialCountdown !== null && initialCountdown > 0) {
-      const countdownTimer = setTimeout(
-        () => setInitialCountdown((prev) => (prev !== null ? prev - 1 : null)),
-        1000
-      );
-      return () => clearTimeout(countdownTimer);
+    if (initialCountdown > 0) {
+      const countdownTimer = setInterval(() => {
+        setInitialCountdown((prev) => prev - 1);
+      }, 1000);
+
+      return () => clearInterval(countdownTimer);
     }
 
     if (initialCountdown === 0) {
-      setInitialCountdown(null);
-      setIsGameActive(true); // Démarrer le jeu
+      setIsGameActive(true);
     }
   }, [initialCountdown]);
 
@@ -168,12 +168,37 @@ export default function Home() {
     },
   };
 
+  const shareScore = async () => {
+    const gameElement = document.getElementById("game-summary");
+    if (!gameElement) return;
+
+    const canvas = await html2canvas(gameElement);
+    const imageData = canvas.toDataURL("image/png");
+
+    const shareText = `🎮 I scored ${score} points in the Kekety Challenge! Can you beat my score? #KeketyChallenge`;
+
+    if (navigator.canShare()) {
+      navigator
+        .share({
+          title: "Kekety Challenge Score",
+          text: shareText,
+          url: imageData,
+        })
+        .catch((err) => console.error("Share failed:", err));
+    } else {
+      navigator.clipboard.writeText(shareText);
+      alert("Score shared successfully! Text copied to clipboard.");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800 p-8">
       <h1 className="text-3xl font-bold mb-4">Kekety Challenge</h1>
 
-      {initialCountdown !== null ? (
-        <p className="text-4xl font-bold mb-8">Starting in: {initialCountdown}</p>
+      {initialCountdown > 0 ? (
+        <p className="text-2xl font-bold mb-8">
+          Game starts in: <span className="text-red-600">{initialCountdown}</span>
+        </p>
       ) : isGameActive ? (
         <>
           <p className="text-lg mb-4">
@@ -197,9 +222,29 @@ export default function Home() {
           <p className="text-lg mb-8">
             {timeLeft === 0 ? `Time's up!` : "Ready to play?"}
           </p>
+          {timeLeft === 0 && score !== 0 && (
+            <>
+              <div id="game-summary" className="text-center">
+                <p className="text-lg">Your score: {score}</p>
+                <div className="w-full max-w-[500px]">
+                  <CustomLineChart
+                    data={chartData}
+                    options={chartOptions}
+                    disableAnnotations={true}
+                  />
+                </div>
+              </div>
+              <button
+                onClick={shareScore}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4"
+              >
+                Share Your Score
+              </button>
+            </>
+          )}
           <button
             onClick={startGame}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-8 mt-4"
           >
             {timeLeft === 0 ? `Restart Game` : "Start Game"}
           </button>
