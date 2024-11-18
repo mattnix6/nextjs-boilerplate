@@ -212,7 +212,7 @@ export default function Home() {
             <p className="text-lg">
               {timeLeft === 0 ? `Time's up! Your score: ${score}` : "Ready to play?"}
             </p>
-            <div className="w-full mt-4 max-w-[500px]">
+            <div className="w-full mt-8 max-w-[500px]">
               <Line data={chartData} options={chartOptions} />
             </div>
           </div>
