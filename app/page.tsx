@@ -21,6 +21,7 @@ export default function Home() {
   const [initialCountdown, setInitialCountdown] = useState(-1);
   const [isGameActive, setIsGameActive] = useState(false);
   const [isSpaceDown, setIsSpaceDown] = useState(false);
+  const [isKeyDown, setIsKeyDown] = useState(false);
   const [clickData, setClickData] = useState<number[]>([]);
 
   const startGame = () => {
@@ -28,6 +29,7 @@ export default function Home() {
     setTimeLeft(10);
     setInitialCountdown(3);
     setIsGameActive(false);
+    setIsKeyDown(false);
     setClickData(Array(10).fill(0));
   };
 
@@ -71,6 +73,7 @@ export default function Home() {
       if (event.code === "Space" && isGameActive && !isSpaceDown) {
         event.preventDefault();
         setIsSpaceDown(true);
+        setIsKeyDown(true);
       }
     };
 
@@ -208,8 +211,8 @@ export default function Home() {
             Score: <span className="font-bold">{score}</span>
           </p>
           <button
-            onClick={handleScore}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+            onClick={ !isKeyDown ? handleScore: () => {} }
+            className={ isKeyDown ? "cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" }
           >
             Click Me! (or Press Space)
           </button>
